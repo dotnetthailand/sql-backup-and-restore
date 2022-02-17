@@ -1,15 +1,21 @@
-/* restore options - restore to the latest point in time with full, differential and transaction log backups */
+DECLARE @databaseName NVARCHAR(64) = '$(databaseName)'
+DECLARE @logName NVARCHAR(64) = '$(databaseName)' + '_log'
 
--- restore full backup
-RESTORE DATABASE [MyDatabaseTest]
-FROM  DISK = N'D:\Backups\MyDatabase_backup_2021_06_01_000011_4175616.bak'
+DECLARE @fullBackupFilePath NVARCHAR(256) = '$(fullBackupFilePath)'
+DECLARE @differentialBackupFilePath NVARCHAR(256) = '$(differentialBackupFilePath)'
+
+DECLARE @databaseFilePath NVARCHAR(256) = '$(databaseFilePath)'
+DECLARE @logFilePath NVARCHAR(256) = '$(logFilePath)'
+
+RESTORE DATABASE @databaseName
+FROM DISK = @fullBackupFilePath
 WITH
-  MOVE N'MyDatabase' TO N'D:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\MyDatabaseTest.mdf',
-  MOVE N'MyDatabase_log' TO N'D:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\MyDatabaseTest_log.ldf',
-  NORECOVERY, -- 'restore with norecovery' allows additional backups to be applied - database will be unavailable
+  MOVE @databaseName TO @databaseFilePath,
+  MOVE @logName TO @logFilePath,
+  NORECOVERY, -- 'with recovery' is optional here - it's the default if not specified - database will be available
   REPLACE;
 
--- restore most recent differential backup
-RESTORE DATABASE [MyDatabaseTest]
-FROM DISK = N'D:\Backups\MyDatabase_backup_2021_06_01_173001_7071188.dif'
+-- Restore most recent differential backup
+RESTORE DATABASE @databaseName
+FROM DISK = @differentialBackupFilePath
 WITH RECOVERY; -- make database available and no more backup files can be applied

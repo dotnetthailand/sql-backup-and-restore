@@ -1,2 +1,6 @@
-BACKUP LOG [SQLShackDemoATC]
-To DISK = 'f:\PowerSQL\SQLShackDemoATC_Log.trn';
+DECLARE @databaseName NVARCHAR(64) = '$(databaseName)'
+DECLARE @backupFilePath NVARCHAR(256) = '$(backupFilePath)'
+
+BACKUP LOG @databaseName
+TO DISK = @backupFilePath
+WITH INIT;

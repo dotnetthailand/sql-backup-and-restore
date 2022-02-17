@@ -1,4 +1,12 @@
 /* init-db.sql */
+IF DB_ID('my-db') IS NOT NULL
+BEGIN
+  ALTER DATABASE [my-db] SET Single_User WITH Rollback Immediate;
+  DROP DATABASE  [my-db];
+END
+GO
+
+
 CREATE DATABASE [my-db];
 GO
 

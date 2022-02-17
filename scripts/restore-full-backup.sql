@@ -1,8 +1,10 @@
 DECLARE @databaseName NVARCHAR(64) = '$(databaseName)'
 DECLARE @logName NVARCHAR(64) = '$(databaseName)' + '_log'
-DECLARE @fullBackupFilePath NVARCHAR(256) = '$(fullBackupFilePath)'
+DECLARE @backupFilePath NVARCHAR(256) = '$(backupFilePath)'
 DECLARE @databaseFilePath NVARCHAR(256) = '$(databaseFilePath)'
 DECLARE @logFilePath NVARCHAR(256) = '$(logFilePath)'
+
+/* restore from the latest full backup */
 
 /*
   The RESTORE ... WITH REPLACE allows you to write over an existing database
@@ -14,9 +16,9 @@ DECLARE @logFilePath NVARCHAR(256) = '$(logFilePath)'
 
 -- restore database
 RESTORE DATABASE @databaseName
-FROM DISK = @fullBackupFilePath
+FROM DISK = @backupFilePath
 WITH
   MOVE @databaseName TO @databaseFilePath,
   MOVE @logName TO @logFilePath,
-  RECOVERY, -- 'with recovery' is optional here - it's the default if not specified - database will be available
+  NORECOVERY, -- 'with recovery' is optional here - it's the default if not specified - database will be available
   REPLACE;
