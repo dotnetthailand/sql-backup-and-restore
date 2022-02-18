@@ -1,3 +1,5 @@
+Import-Module SqlServer
+
 $databaseName = "my-db"
 $connectionString = "Server=localhost,1433; Database=$databaseName; User Id=sa; Password=12345Abc%;"
 $backupFolderPath = "/var/opt/mssql/backup"
