@@ -2,10 +2,9 @@
 IF DB_ID('my-db') IS NOT NULL
 BEGIN
   ALTER DATABASE [my-db] SET Single_User WITH Rollback Immediate;
-  DROP DATABASE  [my-db];
+  DROP DATABASE [my-db];
 END
 GO
-
 
 CREATE DATABASE [my-db];
 GO
@@ -18,5 +17,6 @@ CREATE TABLE [User] (
   DateOfBirth DATETIME NOT NULL
   CONSTRAINT PK_User_Id PRIMARY KEY (Id ASC)
 );
+
 INSERT INTO [User] VALUES ('Jose', 'Realman', '2018-01-01');
 GO
